@@ -7,7 +7,8 @@ import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 
 import './icons' // icon
-
+import SIdentify from './components/VerificationCode/index'
+Vue.use(SIdentify)
 
 Vue.use(ElementUI);
 Vue.config.productionTip = false
