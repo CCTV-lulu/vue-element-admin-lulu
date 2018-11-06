@@ -8,32 +8,33 @@
                 <span class="svg-container">
                     <svg-icon icon-class="user"/>
                 </span>
-                <el-input v-model="loginForm.username" @keyup.enter.native="handleLogin"></el-input>
+                <el-input v-model="loginForm.username" ></el-input>
             </el-form-item>
             <el-form-item prop="password">
                 <span class="svg-container">
                     <svg-icon icon-class="password"/>
                 </span>
-                <el-input v-model="loginForm.password" :type="passwordType" @keyup.enter.native="handleLogin"></el-input>
+                <el-input v-model="loginForm.password" :type="passwordType"></el-input>
                 <span class="svg-eye" @click="showPwd">
                     <svg-icon icon-class="eye"/>
                 </span>
             </el-form-item>
             <div class="verify-container">
                 <el-form-item prop="verifyCode">
-                    <el-input v-model="loginForm.verifyCode" @keyup.enter.native="handleLogin"></el-input>
+                    <el-input v-model="loginForm.verifyCode"></el-input>
                 </el-form-item>
                 <span class="img-verify">
                     <ImgVerify ref="imgVerify" @imgCode="imgCode" />
                 </span>
             </div>
-            <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;">Login</el-button>
+            <el-button type="primary" style="width:100%;margin-bottom:30px;" @click="handleLogin">Login</el-button>
         </el-form>
     </div>
 </template>
 
 <script>
     import ImgVerify from '@/components/VerificationCode'
+    import axios from 'axios'
     export default {
         components: {ImgVerify},
         data() {
@@ -61,10 +62,16 @@
                         this.$refs.imgVerify.draw()
                     },1000)
                     callback(new Error('验证码输入错误'))
+                }else {
+                    callback()
                 }
             }
             return {
-                loginForm: {},
+                loginForm: {
+                    username:'',
+                    password:'',
+                    verifyCode:''
+                },
                 loginTitle: '登录',
                 loginRules: {
                     username: [{ required: true, trigger: 'blur', validator: validateUsername }],
@@ -92,7 +99,16 @@
             handleLogin(){
                 this.$refs.loginForm.validate((valid) => {
                     if (valid) {
-                        alert('submit!');
+                        if(this.loginForm.username === 'admin' && this.loginForm.password === '111111'){
+                            // this.$router.push({ path:  '/test' })
+                            axios.post('/api/hello')
+                                .then(response => {
+                                    console.log(response);
+                                })
+                                .catch(err => {
+                                    console.log(err);
+                                })
+                        }
                     } else {
                         console.log('error submit!!');
                         return false;

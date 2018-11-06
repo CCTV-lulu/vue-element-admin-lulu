@@ -7,7 +7,17 @@ function resolve(dir) {
 
 module.exports = {
     devServer: {
-        port: 3001
+        port: 3001,
+        open:true,
+        proxy:{
+            '/api':{
+                target: 'http://47.75.248.68:8080',
+                changeOrigin: true,
+                pathRewrite: {
+                    '^/api': '/'
+                }
+            }
+        }
     },
     chainWebpack: config => {
         config.module

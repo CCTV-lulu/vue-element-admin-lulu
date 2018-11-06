@@ -9,6 +9,7 @@
     "svgo": "svgo -f src/icons/svg --config=src/icons/svgo.yml"
   },
   "dependencies": {
+    "axios": "^0.18.0",
     "element-ui": "^2.4.5",
     "node-sass": "^4.9.3",
     "sass-loader": "^7.1.0",
