@@ -46,11 +46,16 @@ axios.interceptors.response.use(
                     })
                     //401没有权限，可能是权限过期或者没有token,清除token
                     store.commit(clearToken)
-                    //如果当前登录路由不是登录页面就跳转到登录页面
+                    /**如果当前登录路由不是登录页面就跳转到登录页面
+                     *todo
+                     * 登出
+                    **/
                     router.currentRoute.path !== 'login' &&
                         router.replace({
                             path:'login',
-                            query:{redirect: router.currentRoute.path }
+                            // query:{redirect: router.currentRoute.path }
+                            //todo
+                            //部分页面需要登录
                         });
                     break;
                 case 404:

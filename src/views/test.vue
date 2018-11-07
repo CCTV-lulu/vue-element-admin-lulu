@@ -17,13 +17,15 @@
         <div>
             <el-button type="primary" @click="api404">404接口</el-button>
             <el-button type="primary" @click="api500">500接口</el-button>
+            <el-button type="primary" @click="testMock">mock测试</el-button>
+            <el-button type="primary" @click="loginByUsername">200的接口</el-button>
         </div>
     </div>
 </template>
 
 <script>
     import ImgVerify from '@/components/VerificationCode'
-    import axios from 'axios'
+    import {loginByUsername,test404,test500,testMock} from '@/api/login'
     export default {
         name: 'App',
         methods: {
@@ -33,23 +35,26 @@
             handleClick(){
                 this.$refs.imgVerify.draw()
             },
+
             api404(){
-                axios.post('/api/test404')
-                    .then(response => {
-                        console.log(response);
-                    })
-                    .catch(err => {
-                        console.log(err);
-                    })
+               test404().then(request => {
+
+               })
             },
             api500(){
-                axios.post('/api/test500')
-                    .then(response => {
-                        console.log(response);
-                    })
-                    .catch(err => {
-                        console.log(err);
-                    })
+               test500().then(request => {
+
+               })
+            },
+            testMock(){
+                testMock().then(request => {
+                    console.log(request)
+                })
+            },
+            loginByUsername(){
+                loginByUsername().then(request => {
+                    console.log(request)
+                })
             }
         },
         components: {
