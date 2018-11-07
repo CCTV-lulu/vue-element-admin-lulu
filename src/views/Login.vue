@@ -34,7 +34,6 @@
 
 <script>
     import ImgVerify from '@/components/VerificationCode'
-    import axios from 'axios'
     export default {
         components: {ImgVerify},
         data() {
@@ -100,14 +99,7 @@
                 this.$refs.loginForm.validate((valid) => {
                     if (valid) {
                         if(this.loginForm.username === 'admin' && this.loginForm.password === '111111'){
-                            // this.$router.push({ path:  '/test' })
-                            axios.post('/api/hello')
-                                .then(response => {
-                                    console.log(response);
-                                })
-                                .catch(err => {
-                                    console.log(err);
-                                })
+                            this.$router.push({ path:  '/test' })
                         }
                     } else {
                         console.log('error submit!!');
