@@ -23,3 +23,9 @@ export function testMock() {
        method:'post'
    })
 }
+export function login() {
+    return axios({
+        url:'/api/login',
+        method:'post'
+    })
+}

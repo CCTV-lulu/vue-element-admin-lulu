@@ -6,11 +6,11 @@ function resolve(dir) {
 
 module.exports = {
     devServer: {
-        port: 3001,
+        port: 80,
         open:true,
         proxy:{
             '/api':{
-                target: 'http://47.75.248.68:8080',
+                target: ' https://easy-mock.com/mock/5be3a7c0ff88a57e78f70993/example',
                 changeOrigin: true,
                 pathRewrite: {
                     '^/api': '/'

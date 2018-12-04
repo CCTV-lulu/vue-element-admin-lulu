@@ -19,13 +19,14 @@
             <el-button type="primary" @click="api500">500接口</el-button>
             <el-button type="primary" @click="testMock">mock测试</el-button>
             <el-button type="primary" @click="loginByUsername">200的接口</el-button>
+            <el-button type="primary" @click="login">在线mock接口</el-button>
         </div>
     </div>
 </template>
 
 <script>
     import ImgVerify from '@/components/VerificationCode'
-    import {loginByUsername,test404,test500,testMock} from '@/api/login'
+    import {loginByUsername,test404,test500,testMock,login} from '@/api/login'
     export default {
         name: 'App',
         methods: {
@@ -55,6 +56,11 @@
                 loginByUsername().then(request => {
                     console.log(request)
                 })
+            },
+            login(){
+               login().then(request => {
+                   console.log(request)
+               })
             }
         },
         components: {

@@ -1,8 +1,11 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Login from '@/views/Login'
-import Test from '@/views/test'
+import Test from '@/views/Socket'
+import Css from '@/views/Css'
+
 import store from '@/store/store'
+import Layout from '@/views/layout/Index'
 
 Vue.use(Router)
 
@@ -24,7 +27,25 @@ const routes = [
         path: '/test',
         name: 'Test',
         component: Test
-    }
+    },
+    {
+        path: '/1111css',
+        name: 'Css',
+        component: Css
+    },
+    {
+        path: '',
+        component: Layout,
+        redirect: 'Dash',
+        children: [
+            {
+                path: 'Dash',
+                component: () => import('@/views/gojs/Index'),
+                name: 'Dash',
+                meta: { title: 'Dash', icon: 'Dash', noCache: true }
+            }
+        ]
+    },
 ];
 
 const router = new Router({
