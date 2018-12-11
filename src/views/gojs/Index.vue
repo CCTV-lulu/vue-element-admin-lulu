@@ -1,24 +1,37 @@
 <template>
-    <div id="sample">
-        <div id="paletteDraggable" class="draggable" style="height: 300px;">
-            <div id="paletteDraggableHandle" class="handle">Palette</div>
-            <div id="paletteContainer">
-                <div id="myPaletteDiv"></div>
+    <div class="edif-sample">
+        <el-row class="edit-bar">
+            <el-col :offset="1" :span="11">
+                <p class="title-name">设备监控图</p>
+            </el-col>
+            <el-col  :offset="5" :span="7">
+                <el-button-group class="button-group">
+                    <el-button type="primary" icon="el-icon-edit" @click="addShape">添加图形</el-button>
+                    <el-button type="primary" icon="el-icon-success" @click="save">保存</el-button>
+                </el-button-group>
+            </el-col>
+        </el-row>
+        <div id="sample">
+            <div id="paletteDraggable" class="draggable" style="height: 300px;" v-show="showShape">
+                <div id="paletteDraggableHandle" class="handle">Palette</div>
+                <div id="paletteContainer">
+                    <div id="myPaletteDiv"></div>
+                </div>
+            </div>
+
+            <div id="infoDraggable" class="draggable"
+                 style="display: inline-block; vertical-align: top; padding: 5px; left: 780px;">
+                <div id="infoDraggableHandle" class="handle">Info</div>
+                <div>
+                    <div id="myInfo"></div>
+                </div>
+            </div>
+
+            <div style="display: inline-block; vertical-align: top; width:800px">
+                <div id="myDiagramDiv"
+                     style="background-color: whitesmoke; border: solid 1px black; height: 600px"></div>
             </div>
         </div>
-
-        <div id="infoDraggable" class="draggable"
-             style="display: inline-block; vertical-align: top; padding: 5px; top: 20px; left: 780px;">
-            <div id="infoDraggableHandle" class="handle">Info</div>
-            <div>
-                <div id="myInfo"></div>
-            </div>
-        </div>
-
-        <div style="display: inline-block; vertical-align: top; width:800px">
-            <div id="myDiagramDiv" style="background-color: whitesmoke; border: solid 1px black; height: 600px"></div>
-        </div>
-
     </div>
 </template>
 <script>
@@ -30,6 +43,8 @@
             return {
                 myDiagram: null, // must be true to accept drops from the Palette
                 myPalette: null,
+                model: GO(go.GraphLinksModel),
+                showShape:false,
                 // define several shared Brushes
                 fill1: "rgb(105,210,231)",
                 brush1: "rgb(65,180,181)",
@@ -48,11 +63,15 @@
         },
         mounted() {
             this.createMyDiagram()
-            this.createPalette()
+            // this.createPalette()
             this.dragAndDrop()
             this.getNodeInfo()
         },
         methods: {
+            addShape(){
+                this.showShape = true
+                this.createPalette()
+            },
             createMyDiagram() {
                 var self = this
                 self.myDiagram = GO(go.Diagram, "myDiagramDiv",  // must name or refer to the DIV HTML element
@@ -97,50 +116,115 @@
                         "rotatingTool.snapAngleEpsilon": 15,
                         "undoManager.isEnabled": true
                     });
-                self.myDiagram.nodeTemplate =this.myDiagramNodeTemplate()
+                self.myDiagram.nodeTemplate = this.myDiagramNodeTemplate()
                 self.myDiagram.linkTemplate = this.myDiagramLinkTemplate()
+                self.myDiagram.model = this.getModel()
             },
-            myDiagramNodeTemplate(){
+            myDiagramNodeTemplate() {
                 var self = this
                 var nodeSelectionAdornmentTemplate =
                     GO(go.Adornment, "Auto",
-                        GO(go.Shape, { fill: null, stroke: "deepskyblue", strokeWidth: 1.5, strokeDashArray: [4, 2] }),
+                        GO(go.Shape, {fill: null, stroke: "deepskyblue", strokeWidth: 1.5, strokeDashArray: [4, 2]}),
                         GO(go.Placeholder)
                     );
                 //todo 连接时创建的动态的线
                 var nodeResizeAdornmentTemplate =
                     GO(go.Adornment, "Spot",
-                        { locationSpot: go.Spot.Right },
+                        {locationSpot: go.Spot.Right},
                         GO(go.Placeholder),
-                        GO(go.Shape, { alignment: go.Spot.TopLeft, cursor: "nw-resize", desiredSize: new go.Size(6, 6), fill: "lightblue", stroke: "deepskyblue" }),
-                        GO(go.Shape, { alignment: go.Spot.Top, cursor: "n-resize", desiredSize: new go.Size(6, 6), fill: "lightblue", stroke: "deepskyblue" }),
-                        GO(go.Shape, { alignment: go.Spot.TopRight, cursor: "ne-resize", desiredSize: new go.Size(6, 6), fill: "lightblue", stroke: "deepskyblue" }),
+                        GO(go.Shape, {
+                            alignment: go.Spot.TopLeft,
+                            cursor: "nw-resize",
+                            desiredSize: new go.Size(6, 6),
+                            fill: "lightblue",
+                            stroke: "deepskyblue"
+                        }),
+                        GO(go.Shape, {
+                            alignment: go.Spot.Top,
+                            cursor: "n-resize",
+                            desiredSize: new go.Size(6, 6),
+                            fill: "lightblue",
+                            stroke: "deepskyblue"
+                        }),
+                        GO(go.Shape, {
+                            alignment: go.Spot.TopRight,
+                            cursor: "ne-resize",
+                            desiredSize: new go.Size(6, 6),
+                            fill: "lightblue",
+                            stroke: "deepskyblue"
+                        }),
 
-                        GO(go.Shape, { alignment: go.Spot.Left, cursor: "w-resize", desiredSize: new go.Size(6, 6), fill: "lightblue", stroke: "deepskyblue" }),
-                        GO(go.Shape, { alignment: go.Spot.Right, cursor: "e-resize", desiredSize: new go.Size(6, 6), fill: "lightblue", stroke: "deepskyblue" }),
+                        GO(go.Shape, {
+                            alignment: go.Spot.Left,
+                            cursor: "w-resize",
+                            desiredSize: new go.Size(6, 6),
+                            fill: "lightblue",
+                            stroke: "deepskyblue"
+                        }),
+                        GO(go.Shape, {
+                            alignment: go.Spot.Right,
+                            cursor: "e-resize",
+                            desiredSize: new go.Size(6, 6),
+                            fill: "lightblue",
+                            stroke: "deepskyblue"
+                        }),
 
-                        GO(go.Shape, { alignment: go.Spot.BottomLeft, cursor: "se-resize", desiredSize: new go.Size(6, 6), fill: "lightblue", stroke: "deepskyblue" }),
-                        GO(go.Shape, { alignment: go.Spot.Bottom, cursor: "s-resize", desiredSize: new go.Size(6, 6), fill: "lightblue", stroke: "deepskyblue" }),
-                        GO(go.Shape, { alignment: go.Spot.BottomRight, cursor: "sw-resize", desiredSize: new go.Size(6, 6), fill: "lightblue", stroke: "deepskyblue" })
+                        GO(go.Shape, {
+                            alignment: go.Spot.BottomLeft,
+                            cursor: "se-resize",
+                            desiredSize: new go.Size(6, 6),
+                            fill: "lightblue",
+                            stroke: "deepskyblue"
+                        }),
+                        GO(go.Shape, {
+                            alignment: go.Spot.Bottom,
+                            cursor: "s-resize",
+                            desiredSize: new go.Size(6, 6),
+                            fill: "lightblue",
+                            stroke: "deepskyblue"
+                        }),
+                        GO(go.Shape, {
+                            alignment: go.Spot.BottomRight,
+                            cursor: "sw-resize",
+                            desiredSize: new go.Size(6, 6),
+                            fill: "lightblue",
+                            stroke: "deepskyblue"
+                        })
                     );
                 //todo 目前未知
                 var nodeRotateAdornmentTemplate =
                     GO(go.Adornment,
-                        { locationSpot: go.Spot.Center, locationObjectName: "CIRCLE" },
-                        GO(go.Shape, "Circle", { name: "CIRCLE", cursor: "pointer", desiredSize: new go.Size(7, 7), fill: "lightblue", stroke: "deepskyblue" }),
-                        GO(go.Shape, { geometryString: "M3.5 7 L3.5 30", isGeometryPositioned: true, stroke: "deepskyblue", strokeWidth: 1.5, strokeDashArray: [4, 2] })
+                        {locationSpot: go.Spot.Center, locationObjectName: "CIRCLE"},
+                        GO(go.Shape, "Circle", {
+                            name: "CIRCLE",
+                            cursor: "pointer",
+                            desiredSize: new go.Size(7, 7),
+                            fill: "lightblue",
+                            stroke: "deepskyblue"
+                        }),
+                        GO(go.Shape, {
+                            geometryString: "M3.5 7 L3.5 30",
+                            isGeometryPositioned: true,
+                            stroke: "deepskyblue",
+                            strokeWidth: 1.5,
+                            strokeDashArray: [4, 2]
+                        })
                     );
                 var nodeTemplate =
-                     GO(go.Node, "Spot",
-                        { locationSpot: go.Spot.Center },
+                    GO(go.Node, "Spot",
+                        {locationSpot: go.Spot.Center},
                         new go.Binding("location", "loc", go.Point.parse).makeTwoWay(go.Point.stringify),
-                        { selectable: true, selectionAdornmentTemplate: nodeSelectionAdornmentTemplate },
-                        { resizable: true, resizeObjectName: "PANEL", resizeAdornmentTemplate: nodeResizeAdornmentTemplate },
-                        { rotatable: true, rotateAdornmentTemplate: nodeRotateAdornmentTemplate },
+                        {selectable: true, selectionAdornmentTemplate: nodeSelectionAdornmentTemplate},
+                        {
+                            resizable: true,
+                            resizeObjectName: "PANEL",
+                            resizeAdornmentTemplate: nodeResizeAdornmentTemplate
+                        },
+                        {rotatable: true, rotateAdornmentTemplate: nodeRotateAdornmentTemplate},
                         new go.Binding("angle").makeTwoWay(),
                         // the main object is a Panel that surrounds a TextBlock with a Shape
                         GO(go.Panel, "Auto",
-                            { name: "PANEL" },
+                            {name: "PANEL"},
                             new go.Binding("desiredSize", "size", go.Size.parse).makeTwoWay(go.Size.stringify),
                             GO(go.Shape, "Rectangle",  // default figure
                                 {
@@ -168,23 +252,27 @@
                         self.makePort("R", go.Spot.Right, true, true),
                         self.makePort("B", go.Spot.Bottom, true, false),
                         { // handle mouse enter/leave events to show/hide the ports
-                            mouseEnter: function(e, node) { self.showSmallPorts(node, true); },
-                            mouseLeave: function(e, node) { self.showSmallPorts(node, false); }
+                            mouseEnter: function (e, node) {
+                                self.showSmallPorts(node, true);
+                            },
+                            mouseLeave: function (e, node) {
+                                self.showSmallPorts(node, false);
+                            }
                         })
-                return  nodeTemplate
+                return nodeTemplate
             },
-            myDiagramLinkTemplate(){
+            myDiagramLinkTemplate() {
                 //todo 选中线的时候
                 var linkSelectionAdornmentTemplate =
                     GO(go.Adornment, "Link",
                         GO(go.Shape,
                             // isPanelMain declares that this Shape shares the Link.geometry
-                            { isPanelMain: true, fill: null, stroke: "deepskyblue", strokeWidth: 0 })  // use selection object's strokeWidth
+                            {isPanelMain: true, fill: null, stroke: "deepskyblue", strokeWidth: 0})  // use selection object's strokeWidth
                     );
                 var linkTemplate =
                     GO(go.Link,  // the whole link panel
-                        { selectable: true, selectionAdornmentTemplate: linkSelectionAdornmentTemplate },
-                        { relinkableFrom: true, relinkableTo: true, reshapable: true },
+                        {selectable: true, selectionAdornmentTemplate: linkSelectionAdornmentTemplate},
+                        {relinkableFrom: true, relinkableTo: true, reshapable: true},
                         {
                             routing: go.Link.AvoidsNodes,
                             curve: go.Link.JumpOver,
@@ -193,13 +281,13 @@
                         },
                         new go.Binding("points").makeTwoWay(),
                         GO(go.Shape,  // the link path shape
-                            { isPanelMain: true, strokeWidth: 2 }),
+                            {isPanelMain: true, strokeWidth: 2}),
                         GO(go.Shape,  // the arrowhead
-                            { toArrow: "Standard", stroke: null }),
+                            {toArrow: "Standard", stroke: null}),
                         GO(go.Panel, "Auto",
                             new go.Binding("visible", "isSelected").ofObject(),
                             GO(go.Shape, "RoundedRectangle",  // the link shape
-                                { fill: "#F8F8F8", stroke: null }),
+                                {fill: "#F8F8F8", stroke: null}),
                             GO(go.TextBlock,
                                 {
                                     textAlign: "center",
@@ -213,6 +301,16 @@
                         )
                     );
                 return linkTemplate
+            },
+            getModel() {
+                var model = this.model
+                var modelInfo = JSON.parse(localStorage.getItem("dataInfo"));
+                if(modelInfo){
+                    model.modelData = modelInfo.modelData
+                    model.nodeDataArray = modelInfo.nodeDataArray
+                    model.linkDataArray = modelInfo.linkDataArray
+                }
+                return model
             },
             createPalette() {
                 var self = this
@@ -252,7 +350,7 @@
                         {text: "圆", fill: self.fill5, stroke: self.brush5, figure: "Circle"}
                     ], [
                         // the Palette also has a disconnected Link, which the user can drag-and-drop
-                        { points: new go.List(go.Point).addAll([new go.Point(0, 0), new go.Point(30, 0), new go.Point(30, 40), new go.Point(60, 40)]) }
+                        {points: new go.List(go.Point).addAll([new go.Point(0, 0), new go.Point(30, 0), new go.Point(30, 40), new go.Point(60, 40)])}
                     ]);
 
                 self.myPalette.addDiagramListener("InitialLayoutCompleted", function (diagramEvent) {
@@ -285,27 +383,6 @@
                         }
                     });
             },
-            TopRotatingTool() {
-                go.RotatingTool.call(this);
-                this.TopRotatingToolClass()
-            },
-            TopRotatingToolClass(){
-                go.Diagram.inherit(TopRotatingTool, go.RotatingTool);
-
-                /** @override */
-                TopRotatingTool.prototype.updateAdornments = function(part) {
-                    go.RotatingTool.prototype.updateAdornments.call(this, part);
-                    var adornment = part.findAdornment("Rotating");
-                    if (adornment !== null) {
-                        adornment.location = part.rotateObject.getDocumentPoint(new go.Spot(0.5, 0, 0, -30));  // above middle top
-                    }
-                };
-
-                /** @override */
-                TopRotatingTool.prototype.rotate = function(newangle) {
-                    go.RotatingTool.prototype.rotate.call(this, newangle + 90);
-                };
-            },
             //todo 貌似和创建连线有关，在形状上创建圆点用于连线
             makePort(name, spot, output, input) {
                 // the port is basically just a small transparent square
@@ -324,21 +401,38 @@
             },
             //todo 显示小点
             showSmallPorts(node, show) {
-                node.ports.each(function(port) {
+                node.ports.each(function (port) {
                     if (port.portId !== "") {  // don't change the default port, which is the big shape
                         port.fill = show ? "rgba(0,0,0,.3)" : null;
                     }
                 });
+            },
+            save() {
+                this.saveDiagramProperties();  // do this first, before writing to JSON
+                localStorage.setItem("dataInfo",this.myDiagram.model.toJson());
+                this.myDiagram.isModified = false;
+                this.showShape = false
+            },
+            saveDiagramProperties() {
+                this.myDiagram.model.modelData.position = go.Point.stringify(this.myDiagram.position);
             }
         }
     }
 </script>
 <style rel="stylesheet/scss" lang="scss" scoped>
-    #sample {
+    .edif-sample {
         margin-left: 20px;
         margin-top: 20px;
+        width: 800px;
     }
 
+    .edit-bar {
+        width: 100%;
+        background-color: #f5f5f5;
+    }
+    .title-name{
+        font: bold 20px sans-serif;
+    }
     .draggable {
         display: inline-block;
         vertical-align: top;
@@ -347,7 +441,7 @@
         background-color: #F5F5F5;
 
         position: absolute;
-        top: 20px;
+        /*top: 20px;*/
         left: 20px;
         z-index: 500;
     }
