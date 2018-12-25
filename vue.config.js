@@ -10,10 +10,10 @@ module.exports = {
         open:true,
         proxy:{
             '/api':{
-                target: ' https://easy-mock.com/mock/5be3a7c0ff88a57e78f70993/example',
+                target: ' https://easy-mock.com/mock/5be3a7c0ff88a57e78f70993/example',//后端接口
                 changeOrigin: true,
                 pathRewrite: {
-                    '^/api': '/'
+                    '^/api': '/'//接口指代方式
                 }
             }
         }

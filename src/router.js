@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Login from '@/views/Login'
-import Test from '@/views/Socket'
+import Test from '@/views/MockAndImgCode'
 import Css from '@/views/Css'
 
 import store from '@/store/store'
@@ -40,7 +40,7 @@ const routes = [
         children: [
             {
                 path: 'Dash',
-                component: () => import('@/views/gojs/Index'),
+                component: () => import('@/views/gojs/test'),
                 name: 'Dash',
                 meta: { title: 'Dash', icon: 'Dash', noCache: true }
             }

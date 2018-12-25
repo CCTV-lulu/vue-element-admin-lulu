@@ -5,6 +5,7 @@
         <div style="margin: 20px 0">
             <button @click="handleClick">点击</button>
         </div>
+        <Bus2></Bus2>
         <fieldset>
             <legend>说明：</legend>
             <ul>
@@ -26,9 +27,13 @@
 
 <script>
     import ImgVerify from '@/components/VerificationCode'
+    import Bus2 from './layout/bus2'
     import {loginByUsername,test404,test500,testMock,login} from '@/api/login'
     export default {
         name: 'App',
+        provide: {
+            name: 'Aresn'
+        },
         methods: {
             imgCode(code) {
                 console.log(code)
@@ -64,7 +69,7 @@
             }
         },
         components: {
-            ImgVerify
+            ImgVerify,Bus2
         }
     }
 </script>

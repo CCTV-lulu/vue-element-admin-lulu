@@ -96,10 +96,12 @@
                 }
             },
             handleLogin(){
+
                 this.$refs.loginForm.validate((valid) => {
                     if (valid) {
                         if(this.loginForm.username === 'admin' && this.loginForm.password === '111111'){
                             this.$router.push({ path:  '/test' })
+
                         }
                     } else {
                         console.log('error submit!!');

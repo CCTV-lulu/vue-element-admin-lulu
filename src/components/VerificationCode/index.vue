@@ -10,6 +10,7 @@
 
 <script type="text/ecmascript-6">
     export default {
+        inject: ['name'],
         data() {
             return {
                 pool: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890', // 字符串
@@ -18,6 +19,7 @@
             }
         },
         mounted() {
+            console.log(this.name);
             this.draw()
         },
         methods: {
@@ -105,6 +107,7 @@
                 }
                 // 将生成的四个字传递给父组件
                 this.$emit('imgCode', imgCode)
+                this.$bus.emit('data',imgCode)
             }
         }
     }
