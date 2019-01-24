@@ -3,6 +3,9 @@ import Router from 'vue-router'
 import Login from '@/views/Login'
 import Test from '@/views/MockAndImgCode'
 import Css from '@/views/Css'
+import tableInput from '@/views/tableInput/index'
+import twoFrom from '@/views/twoForm/index'
+import cssTest from '@/views/cssTest/index'
 
 import store from '@/store/store'
 import Layout from '@/views/layout/Index'
@@ -32,6 +35,21 @@ const routes = [
         path: '/1111css',
         name: 'Css',
         component: Css
+    },
+    {
+        path: '/tableInput',
+        name: 'tableInput',
+        component: tableInput
+    },
+    {
+        path: '/twoFrom',
+        name: 'twoFrom',
+        component: twoFrom
+    },
+    {
+        path: '/cssTest',
+        name: 'cssTest',
+        component: cssTest
     },
     {
         path: '',
